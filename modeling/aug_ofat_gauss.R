@@ -13,7 +13,6 @@ source(file.path(soft_root, "functions.R"))
 
 ####### load prerun design
 setwd(file.path(soft_root, "modeling", "designs"))
-# load("prerun aug mofat.RData")
 load("prerun aug stand.RData")
 load("prerun aug strict.RData")
 setwd(file.path(soft_root, "modeling", "gauss"))
@@ -21,7 +20,6 @@ setwd(file.path(soft_root, "modeling", "gauss"))
 ############################################################ p = 6
 set.seed(0)
 test_X <- MOFAT::qmc_generate(10000,6)
-# ofat_D <- list(aug_mofat_D[[1]], aug_stand_D[[1]], aug_strict_D[[1]])
 ofat_D <- list(aug_stand_D[[1]], aug_strict_D[[1]])
 
 ################################################## OTL-Circuit
@@ -40,7 +38,6 @@ save(aug_otl_ofat_gauss_0, file = "aug_otl_ofat_gauss_0.RData")
 ############################################################ p = 7
 set.seed(0)
 test_X <- MOFAT::qmc_generate(10000,7)
-# ofat_D <- list(aug_mofat_D[[2]], aug_stand_D[[2]], aug_strict_D[[2]])
 ofat_D <- list(aug_stand_D[[2]], aug_strict_D[[2]])
 
 ################################################## piston
@@ -59,7 +56,6 @@ save(aug_piston_ofat_gauss_0, file = "aug_piston_ofat_gauss_0.RData")
 ############################################################ p = 8
 set.seed(0)
 test_X <- MOFAT::qmc_generate(10000,8)
-# ofat_D <- list(aug_mofat_D[[3]], aug_stand_D[[3]], aug_strict_D[[3]])
 ofat_D <- list(aug_stand_D[[3]], aug_strict_D[[3]])
 
 ################################################## g-function
@@ -145,7 +141,6 @@ save(aug_dette_ofat_gauss_0, file = "aug_dette_ofat_gauss_0.RData")
 ############################################################ p = 20
 set.seed(0)
 test_X <- MOFAT::qmc_generate(10000,20)
-# ofat_D <- list(aug_mofat_D[[length(aug_mofat_D)]], aug_stand_D[[length(aug_stand_D)]], aug_strict_D[[length(aug_strict_D)]])
 ofat_D <- list(aug_stand_D[[length(aug_stand_D)]], aug_strict_D[[length(aug_strict_D)]])
 
 ################################################## OTL-Circuit

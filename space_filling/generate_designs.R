@@ -119,27 +119,6 @@ save(strict_D, strict_time, file = "prerun strict.RData")
 ######################################################### 
 l_aug <- 4
 
-# Augmented MOFAT
-aug_mofat_info <- lapply(2:20, function(i) {
-  print(i)
-  n_aug <- (l-l_aug) * (i+1)
-  lapply(1:30, function(j) {
-    timing <- system.time({
-      D <- MOFAT::mofat(i, l_aug, "projection", init = "MmLHD")
-      D <- MOFAT::a_soft(i, l_aug, n_aug = n_aug, ofat_design = D)
-    })
-    list(design = D$design, elapsed_time = unname(timing["elapsed"]))
-  })
-})
-aug_mofat_D <- lapply(aug_mofat_info, function(i) {
-  lapply(i, `[[`, "design")
-})
-aug_mofat_time <- lapply(aug_mofat_info, function(i) {
-  unlist(lapply(i, `[[`, "elapsed_time"))
-})
-save(aug_mofat_D, aug_mofat_time, file = "prerun aug mofat.RData")
-
-
 # soft - standard
 aug_stand_info <- lapply(2:20, function(i) {
   print(i)

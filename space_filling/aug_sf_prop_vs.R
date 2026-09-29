@@ -22,27 +22,12 @@ load("prerun maxpro.RData")
 load("prerun mofat.RData")
 load("prerun stand.RData")
 load("prerun strict.RData")
-# load("prerun aug mofat.RData")
 load("prerun aug stand.RData")
 load("prerun aug strict.RData")
 
 ############################# Q
 l = 6
 beta = 1/(2*l)^2
-
-# aug_mofat_Q <- lapply(1:19, function(i) {
-#   print(i)
-#   set.seed(i)
-#   p <- i+1
-#   qmc <- MOFAT::qmc_generate(10000, p) 
-#   a <- lapply(1:30, function(j) {
-#     MOFAT::Q(1, beta, aug_mofat_D[[i]][[j]], qmc)$Q
-#   })
-#   a <- unlist(a)
-#   return(a)
-# })
-# aug_mofat_Q <- Reduce(cbind, aug_mofat_Q)
-
 
 aug_stand_Q <- lapply(1:19, function(i) {
   print(i)
@@ -72,7 +57,6 @@ aug_strict_Q <- lapply(1:19, function(i) {
 aug_strict_Q <- Reduce(cbind, aug_strict_Q)
 
 setwd(file.path(soft_root, "space_filling", "visualization"))
-# save(aug_mofat_Q, aug_stand_Q, aug_strict_Q, file = "aug_Q.RData")
 save(aug_stand_Q, aug_strict_Q, file = "aug_Q.RData")
 
 
@@ -83,19 +67,6 @@ entropy_fun <- function(D,beta) {
   ans <- sum(1/(1 + dist(D)^2 / gamma)) # minimize
   return(1/ans) # maximize
 }
-
-# aug_mofat_ent <- lapply(1:19, function(i) {
-#   print(i)
-#   set.seed(i)
-#   p <- i+1
-#   a <- lapply(1:30, function(j) {
-#     entropy_fun(aug_mofat_D[[i]][[j]], beta)
-#   })
-#   a <- unlist(a)
-#   return(a)
-# })
-# aug_mofat_ent <- Reduce(cbind, aug_mofat_ent)
-
 
 aug_stand_ent <- lapply(1:19, function(i) {
   print(i)
@@ -122,7 +93,6 @@ aug_strict_ent <- lapply(1:19, function(i) {
 })
 aug_strict_ent <- Reduce(cbind, aug_strict_ent)
 
-# save(aug_mofat_ent, aug_stand_ent, aug_strict_ent, file = "aug_ent.RData")
 save(aug_stand_ent, aug_strict_ent, file = "aug_ent.RData")
 
 
@@ -133,7 +103,6 @@ mofat_time = Reduce(cbind, mofat_time)
 stand_time = Reduce(cbind, stand_time)
 strict_time = Reduce(cbind, strict_time)
 
-# aug_mofat_time = Reduce(cbind, aug_mofat_time)
 aug_stand_time = Reduce(cbind, aug_stand_time)
 aug_strict_time = Reduce(cbind, aug_strict_time)
 
