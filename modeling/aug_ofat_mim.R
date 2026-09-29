@@ -1,13 +1,22 @@
 rm(list = ls())
-source("/Users/weiyang/Library/CloudStorage/OneDrive-GeorgiaInstituteofTechnology/OFAT Design/code/modeling/lib.R")
-source("/Users/weiyang/Library/CloudStorage/OneDrive-GeorgiaInstituteofTechnology/OFAT Design/code/functions.R")
+# Resolve paths from the SOFT repository root or any subdirectory.
+soft_root <- normalizePath(".")
+while (!file.exists(file.path(soft_root, "functions.R"))) {
+  if (identical(soft_root, dirname(soft_root))) {
+    stop("Run this script from the SOFT repository or one of its subdirectories.")
+  }
+  soft_root <- dirname(soft_root)
+}
+
+source(file.path(soft_root, "modeling", "lib.R"))
+source(file.path(soft_root, "functions.R"))
 
 ####### load prerun design
-setwd("/Users/weiyang/Library/CloudStorage/OneDrive-GeorgiaInstituteofTechnology/OFAT Design/code/modeling/designs")
+setwd(file.path(soft_root, "modeling", "designs"))
 # load("prerun aug mofat.RData")
 load("prerun aug stand.RData")
 load("prerun aug strict.RData")
-setwd("/Users/weiyang/Library/CloudStorage/OneDrive-GeorgiaInstituteofTechnology/OFAT Design/code/modeling/mim")
+setwd(file.path(soft_root, "modeling", "mim"))
 
 ############################################################ p = 6
 set.seed(0)

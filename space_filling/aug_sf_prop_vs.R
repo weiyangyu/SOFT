@@ -1,11 +1,20 @@
 rm(list = ls())
+# Resolve paths from the SOFT repository root or any subdirectory.
+soft_root <- normalizePath(".")
+while (!file.exists(file.path(soft_root, "functions.R"))) {
+  if (identical(soft_root, dirname(soft_root))) {
+    stop("Run this script from the SOFT repository or one of its subdirectories.")
+  }
+  soft_root <- dirname(soft_root)
+}
+
 library(dplyr)
 library(tidyr)
 library(ggplot2)
 library(reshape2)
 library(grid)
 library(gridExtra)
-setwd("/Users/weiyang/Library/CloudStorage/OneDrive-GeorgiaInstituteofTechnology/OFAT Design/code/space_filling/designs")
+setwd(file.path(soft_root, "space_filling", "designs"))
 
 ####### load prerun design
 load("prerun MmLHD.RData")
@@ -62,7 +71,7 @@ aug_strict_Q <- lapply(1:19, function(i) {
 })
 aug_strict_Q <- Reduce(cbind, aug_strict_Q)
 
-setwd("/Users/weiyang/Library/CloudStorage/OneDrive-GeorgiaInstituteofTechnology/OFAT Design/code/space_filling/visualization")
+setwd(file.path(soft_root, "space_filling", "visualization"))
 # save(aug_mofat_Q, aug_stand_Q, aug_strict_Q, file = "aug_Q.RData")
 save(aug_stand_Q, aug_strict_Q, file = "aug_Q.RData")
 

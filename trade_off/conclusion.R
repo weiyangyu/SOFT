@@ -1,5 +1,14 @@
 rm(list = ls())
-setwd("/Users/weiyang/Library/CloudStorage/OneDrive-GeorgiaInstituteofTechnology/OFAT Design/code/space_filling/visualization")
+# Resolve paths from the SOFT repository root or any subdirectory.
+soft_root <- normalizePath(".")
+while (!file.exists(file.path(soft_root, "functions.R"))) {
+  if (identical(soft_root, dirname(soft_root))) {
+    stop("Run this script from the SOFT repository or one of its subdirectories.")
+  }
+  soft_root <- dirname(soft_root)
+}
+
+setwd(file.path(soft_root, "space_filling", "visualization"))
 load("Q.RData")
 load("aug_Q.RData")
 Q_vals <- c(1, median(maxpro_Q[,9])/median(MmLHD_Q[,9]), median(mofat_Q[,9])/median(MmLHD_Q[,9]), 
@@ -7,7 +16,7 @@ Q_vals <- c(1, median(maxpro_Q[,9])/median(MmLHD_Q[,9]), median(mofat_Q[,9])/med
   median(aug_stand_Q[,9])/median(MmLHD_Q[,9]), median(aug_strict_Q[,9])/median(MmLHD_Q[,9]))
 
 ####### load prerun design
-setwd("/Users/weiyang/Library/CloudStorage/OneDrive-GeorgiaInstituteofTechnology/OFAT Design/code/space_filling/designs")
+setwd(file.path(soft_root, "space_filling", "designs"))
 load("prerun MmLHD.RData")
 load("prerun maxpro.RData")
 load("prerun mofat.RData")

@@ -1,5 +1,14 @@
 rm(list = ls())
-setwd("/Users/weiyang/Library/CloudStorage/OneDrive-GeorgiaInstituteofTechnology/OFAT Design/code/modeling/gauss")
+# Resolve paths from the SOFT repository root or any subdirectory.
+soft_root <- normalizePath(".")
+while (!file.exists(file.path(soft_root, "functions.R"))) {
+  if (identical(soft_root, dirname(soft_root))) {
+    stop("Run this script from the SOFT repository or one of its subdirectories.")
+  }
+  soft_root <- dirname(soft_root)
+}
+
+setwd(file.path(soft_root, "modeling", "gauss"))
 
 ######################### load mse with the original dimension
 load("ackley_sfd_gauss_0.RData")
@@ -224,7 +233,7 @@ plot_mse_row <- function(
   ))
 }
 
-setwd("/Users/weiyang/Library/CloudStorage/OneDrive-GeorgiaInstituteofTechnology/OFAT Design/code/modeling/visual_gauss")
+setwd(file.path(soft_root, "modeling", "visual_gauss"))
 png("aug_ackley_mse_gauss.png", width = 8000, height = 2700, res = 600)
 plot_mse_row(
   ackley_sfd_gauss_0,

@@ -1,6 +1,15 @@
+# Resolve paths from the SOFT repository root or any subdirectory.
+soft_root <- normalizePath(".")
+while (!file.exists(file.path(soft_root, "functions.R"))) {
+  if (identical(soft_root, dirname(soft_root))) {
+    stop("Run this script from the SOFT repository or one of its subdirectories.")
+  }
+  soft_root <- dirname(soft_root)
+}
+
 # For space-filling designs, modeling is done in the full space.
 library(nloptr)
-Rcpp::sourceCpp("/Users/weiyang/Library/CloudStorage/OneDrive-GeorgiaInstituteofTechnology/OFAT Design/code/modeling/MIM_GP.cpp")
+Rcpp::sourceCpp(file.path(soft_root, "modeling", "MIM_GP.cpp"))
 
 # MIM kernel
 Fit.MIM.alpha <- function(X, y) {
@@ -108,7 +117,7 @@ workers <- max(1L, future::availableCores() - 2L)
 future::plan(future::multisession, workers = workers)
 # future::plan(future::multicore, workers = workers)
 progressr::handlers("txtprogressbar")
-cpp_file <- "/Users/weiyang/Library/CloudStorage/OneDrive-GeorgiaInstituteofTechnology/OFAT Design/code/modeling/MIM_GP.cpp"
+cpp_file <- file.path(soft_root, "modeling", "MIM_GP.cpp")
 
 surrogate_parallel <- function(X_ls, X_type, l, fun, kernel, test_X) {
   ans_list <- progressr::with_progress({

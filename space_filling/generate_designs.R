@@ -3,7 +3,16 @@
 # l = 6
 
 rm(list = ls())
-setwd("/Users/weiyang/Library/CloudStorage/OneDrive-GeorgiaInstituteofTechnology/OFAT Design/code/space_filling/designs")
+# Resolve paths from the SOFT repository root or any subdirectory.
+soft_root <- normalizePath(".")
+while (!file.exists(file.path(soft_root, "functions.R"))) {
+  if (identical(soft_root, dirname(soft_root))) {
+    stop("Run this script from the SOFT repository or one of its subdirectories.")
+  }
+  soft_root <- dirname(soft_root)
+}
+
+setwd(file.path(soft_root, "space_filling", "designs"))
 l = 6
 
 # MmLHD
@@ -117,7 +126,7 @@ aug_mofat_info <- lapply(2:20, function(i) {
   lapply(1:30, function(j) {
     timing <- system.time({
       D <- MOFAT::mofat(i, l_aug, "projection", init = "MmLHD")
-      D <- MOFAT::soft_augment(i, l_aug, n_aug = n_aug, existing_design = D)
+      D <- MOFAT::a_soft(i, l_aug, n_aug = n_aug, ofat_design = D)
     })
     list(design = D$design, elapsed_time = unname(timing["elapsed"]))
   })
@@ -137,7 +146,7 @@ aug_stand_info <- lapply(2:20, function(i) {
   n_aug <- (l-l_aug) * (i+1)
   lapply(1:30, function(j) {
     timing <- system.time({
-      D <- MOFAT::soft_augment(i,l_aug,n_aug = n_aug)
+      D <- MOFAT::a_soft(i,l_aug,n_aug = n_aug)
       D <- D$design
     })
     list(design = D, elapsed_time = unname(timing["elapsed"]))
@@ -158,7 +167,7 @@ aug_strict_info <- lapply(2:20, function(i) {
   n_aug <- (l-l_aug) * (i+1)
   lapply(1:30, function(j) {
     timing <- system.time({
-      D <- MOFAT::soft_augment(i, l_aug, structure = "strict", n_aug = n_aug)
+      D <- MOFAT::a_soft(i, l_aug, structure = "strict", n_aug = n_aug)
       D <- D$design
     })
     list(design = D, elapsed_time = unname(timing["elapsed"]))
