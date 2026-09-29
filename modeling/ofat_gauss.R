@@ -137,31 +137,12 @@ dette_ofat_gauss_0 <- lapply(1:length(ofat_D), function(i) {
 save(dette_ofat_gauss_0, file = "dette_ofat_gauss_0.RData")
 
 
-############################################################ p = 10
-set.seed(0)
-test_X <- MOFAT::qmc_generate(10000,10)
-ofat_D <- list(mofat_D[[4]], stand_D[[4]], strict_D[[4]])
-
-################################################## wing
-wing_e <- function(X) {
-  val = wingweight(X)
-  return(val)
-}
-wing_ofat_gauss_0 <- lapply(1:length(ofat_D), function(i) {
-  surrogate_parallel(X_ls = ofat_D[[i]], 
-  X_type = "OFAT", l = 8,fun = wing_e, kernel = "Gaussian", 
-  test_X = test_X)
-})
-save(wing_ofat_gauss_0, file = "wing_ofat_gauss_0.RData")
-
-
-
 ############################################################
 ############################################################
 ############################################################ p = 20
 set.seed(0)
 test_X <- MOFAT::qmc_generate(10000,20)
-ofat_D <- list(mofat_D[[5]], stand_D[[5]], strict_D[[5]])
+ofat_D <- list(mofat_D[[length(mofat_D)]], stand_D[[length(stand_D)]], strict_D[[length(strict_D)]])
 
 ################################################## OTL-Circuit
 X = spacefillr::generate_sobol_set(10000,6)
@@ -297,20 +278,3 @@ dette_ofat_gauss_1 <- lapply(1:length(ofat_D), function(i) {
   test_X = test_X)
 })
 save(dette_ofat_gauss_1, file = "dette_ofat_gauss_1.RData")
-
-
-################################################## wing
-X = spacefillr::generate_sobol_set(10000,10)
-y = wingweight(X)
-sd = sqrt(var(y) / 100)
-wing_e <- function(X) {
-  val = wingweight(X)
-  e = apply(X, 1, inert, p = 10, k = 10, seed = 0, sd = sd)
-  return(val + e)
-}
-wing_ofat_gauss_1 <- lapply(1:length(ofat_D), function(i) {
-  surrogate_parallel(X_ls = ofat_D[[i]], 
-  X_type = "OFAT", l = 8,fun = wing_e, kernel = "Gaussian", 
-  test_X = test_X)
-})
-save(wing_ofat_gauss_1, file = "wing_ofat_gauss_1.RData")

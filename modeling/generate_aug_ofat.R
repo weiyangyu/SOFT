@@ -10,7 +10,7 @@ while (!file.exists(file.path(soft_root, "functions.R"))) {
 }
 
 setwd(file.path(soft_root, "modeling", "designs"))
-p = c(6,7,8,10,20)
+p = c(6,7,8,20)
 l = 4
 
 # MOFAT

@@ -220,7 +220,7 @@ for(i in 1:30) {
     "OFAT", g_fun_e, i))
 }
 save(true_t_gfun, MmLHD_t_gfun, maxpro_t_gfun, 
-  mofat_t_gfun, stand_t_gfun, strict_t_gfun, file = )
+  mofat_t_gfun, stand_t_gfun, strict_t_gfun, file = "t_gfun.RData")
 
 load("t_gfun.RData")
 t_gfun <- list(MmLHD_t_gfun, maxpro_t_gfun, mofat_t_gfun, stand_t_gfun, strict_t_gfun)

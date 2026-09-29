@@ -35,9 +35,6 @@ load("aug_piston_ofat_gauss_0.RData")
 load("robot_sfd_gauss_0.RData")
 load("robot_ofat_gauss_0.RData")
 load("aug_robot_ofat_gauss_0.RData")
-load("wing_sfd_gauss_0.RData")
-load("wing_ofat_gauss_0.RData")
-load("aug_wing_ofat_gauss_0.RData")
 
 
 ######################### load mse with the augmented dimension
@@ -65,9 +62,6 @@ load("aug_piston_ofat_gauss_1.RData")
 load("robot_sfd_gauss_1.RData")
 load("robot_ofat_gauss_1.RData")
 load("aug_robot_ofat_gauss_1.RData")
-load("wing_sfd_gauss_1.RData")
-load("wing_ofat_gauss_1.RData")
-load("aug_wing_ofat_gauss_1.RData")
 
 
 
@@ -347,22 +341,6 @@ plot_mse_row(
   colors = c("#5f5f5f", "#2e8b57", "#2f38ff", "#f4a261", "#cc45e0", "#b38b63", "#b980ff")
 )
 dev.off()
-
-png("aug_wing_mse_gauss.png", width = 8000, height = 2700, res = 600)
-plot_mse_row(
-  wing_sfd_gauss_0,
-  wing_ofat_gauss_0,
-  aug_wing_ofat_gauss_0,
-  wing_sfd_gauss_1,
-  wing_ofat_gauss_1,
-  aug_wing_ofat_gauss_1,
-  row_title = "Wingweight",
-  panel_titles = c("p = 10", "p = 10 + 10"),
-  method_labels = c("MmLHD", "MaxPro", "MOFAT", "SOFT\nStand", "SOFT\nStrict", "A-SOFT\nStand", "A-SOFT\nStrict"),
-  colors = c("#5f5f5f", "#2e8b57", "#2f38ff", "#f4a261", "#cc45e0", "#b38b63", "#b980ff")
-)
-dev.off()
-
 
 # library(dplyr)
 # library(tidyr)

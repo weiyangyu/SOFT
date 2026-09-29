@@ -140,33 +140,13 @@ aug_dette_ofat_mim_0 <- lapply(1:length(ofat_D), function(i) {
 save(aug_dette_ofat_mim_0, file = "aug_dette_ofat_mim_0.RData")
 
 
-############################################################ p = 10
-set.seed(0)
-test_X <- MOFAT::qmc_generate(10000,10)
-# ofat_D <- list(aug_mofat_D[[4]], aug_stand_D[[4]], aug_strict_D[[4]])
-ofat_D <- list(aug_stand_D[[4]], aug_strict_D[[4]])
-
-################################################## wing
-wing_e <- function(X) {
-  val = wingweight(X)
-  return(val)
-}
-aug_wing_ofat_mim_0 <- lapply(1:length(ofat_D), function(i) {
-  surrogate_parallel(X_ls = ofat_D[[i]], 
-  X_type = "OFAT", l = 4,fun = wing_e, kernel = "MIM", 
-  test_X = test_X)
-})
-save(aug_wing_ofat_mim_0, file = "aug_wing_ofat_mim_0.RData")
-
-
-
 ############################################################
 ############################################################
 ############################################################ p = 20
 set.seed(0)
 test_X <- MOFAT::qmc_generate(10000,20)
-# ofat_D <- list(aug_mofat_D[[5]], aug_stand_D[[5]], aug_strict_D[[5]])
-ofat_D <- list(aug_stand_D[[5]], aug_strict_D[[5]])
+# ofat_D <- list(aug_mofat_D[[length(aug_mofat_D)]], aug_stand_D[[length(aug_stand_D)]], aug_strict_D[[length(aug_strict_D)]])
+ofat_D <- list(aug_stand_D[[length(aug_stand_D)]], aug_strict_D[[length(aug_strict_D)]])
 
 ################################################## OTL-Circuit
 X = spacefillr::generate_sobol_set(10000,6)
@@ -302,20 +282,3 @@ aug_dette_ofat_mim_1 <- lapply(1:length(ofat_D), function(i) {
   test_X = test_X)
 })
 save(aug_dette_ofat_mim_1, file = "aug_dette_ofat_mim_1.RData")
-
-
-################################################## wing
-X = spacefillr::generate_sobol_set(10000,10)
-y = wingweight(X)
-sd = sqrt(var(y) / 100)
-wing_e <- function(X) {
-  val = wingweight(X)
-  e = apply(X, 1, inert, p = 10, k = 10, seed = 0, sd = sd)
-  return(val + e)
-}
-aug_wing_ofat_mim_1 <- lapply(1:length(ofat_D), function(i) {
-  surrogate_parallel(X_ls = ofat_D[[i]], 
-  X_type = "OFAT", l = 4,fun = wing_e, kernel = "MIM", 
-  test_X = test_X)
-})
-save(aug_wing_ofat_mim_1, file = "aug_wing_ofat_mim_1.RData")
