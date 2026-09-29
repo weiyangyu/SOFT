@@ -1,14 +1,23 @@
 rm(list = ls())
-source("/Users/weiyang/Library/CloudStorage/OneDrive-GeorgiaInstituteofTechnology/OFAT Design/code/functions.R")
+# Resolve paths from the SOFT repository root or any subdirectory.
+soft_root <- normalizePath(".")
+while (!file.exists(file.path(soft_root, "functions.R"))) {
+  if (identical(soft_root, dirname(soft_root))) {
+    stop("Run this script from the SOFT repository or one of its subdirectories.")
+  }
+  soft_root <- dirname(soft_root)
+}
+
+source(file.path(soft_root, "functions.R"))
 
 ####### load prerun design
-setwd("/Users/weiyang/Library/CloudStorage/OneDrive-GeorgiaInstituteofTechnology/OFAT Design/code/screening/designs")
+setwd(file.path(soft_root, "screening", "designs"))
 load("prerun MmLHD.RData")
 load("prerun maxpro.RData")
 load("prerun mofat.RData")
 load("prerun stand.RData")
 load("prerun strict.RData")
-setwd("/Users/weiyang/Library/CloudStorage/OneDrive-GeorgiaInstituteofTechnology/OFAT Design/code/screening/results")
+setwd(file.path(soft_root, "screening", "results"))
 
 ####### For factor screening
 screen <- function(X, X_type, fun, seed) {
@@ -211,7 +220,7 @@ for(i in 1:30) {
     "OFAT", g_fun_e, i))
 }
 save(true_t_gfun, MmLHD_t_gfun, maxpro_t_gfun, 
-  mofat_t_gfun, stand_t_gfun, strict_t_gfun, file = )
+  mofat_t_gfun, stand_t_gfun, strict_t_gfun, file = "t_gfun.RData")
 
 load("t_gfun.RData")
 t_gfun <- list(MmLHD_t_gfun, maxpro_t_gfun, mofat_t_gfun, stand_t_gfun, strict_t_gfun)

@@ -1,18 +1,25 @@
 rm(list = ls())
-source("/Users/weiyang/Library/CloudStorage/OneDrive-GeorgiaInstituteofTechnology/OFAT Design/code/modeling/lib.R")
-source("/Users/weiyang/Library/CloudStorage/OneDrive-GeorgiaInstituteofTechnology/OFAT Design/code/functions.R")
+# Resolve paths from the SOFT repository root or any subdirectory.
+soft_root <- normalizePath(".")
+while (!file.exists(file.path(soft_root, "functions.R"))) {
+  if (identical(soft_root, dirname(soft_root))) {
+    stop("Run this script from the SOFT repository or one of its subdirectories.")
+  }
+  soft_root <- dirname(soft_root)
+}
+
+source(file.path(soft_root, "modeling", "lib.R"))
+source(file.path(soft_root, "functions.R"))
 
 ####### load prerun design
-setwd("/Users/weiyang/Library/CloudStorage/OneDrive-GeorgiaInstituteofTechnology/OFAT Design/code/modeling/designs")
-# load("prerun aug mofat.RData")
+setwd(file.path(soft_root, "modeling", "designs"))
 load("prerun aug stand.RData")
 load("prerun aug strict.RData")
-setwd("/Users/weiyang/Library/CloudStorage/OneDrive-GeorgiaInstituteofTechnology/OFAT Design/code/modeling/gauss")
+setwd(file.path(soft_root, "modeling", "gauss"))
 
 ############################################################ p = 6
 set.seed(0)
 test_X <- MOFAT::qmc_generate(10000,6)
-# ofat_D <- list(aug_mofat_D[[1]], aug_stand_D[[1]], aug_strict_D[[1]])
 ofat_D <- list(aug_stand_D[[1]], aug_strict_D[[1]])
 
 ################################################## OTL-Circuit
@@ -31,7 +38,6 @@ save(aug_otl_ofat_gauss_0, file = "aug_otl_ofat_gauss_0.RData")
 ############################################################ p = 7
 set.seed(0)
 test_X <- MOFAT::qmc_generate(10000,7)
-# ofat_D <- list(aug_mofat_D[[2]], aug_stand_D[[2]], aug_strict_D[[2]])
 ofat_D <- list(aug_stand_D[[2]], aug_strict_D[[2]])
 
 ################################################## piston
@@ -50,7 +56,6 @@ save(aug_piston_ofat_gauss_0, file = "aug_piston_ofat_gauss_0.RData")
 ############################################################ p = 8
 set.seed(0)
 test_X <- MOFAT::qmc_generate(10000,8)
-# ofat_D <- list(aug_mofat_D[[3]], aug_stand_D[[3]], aug_strict_D[[3]])
 ofat_D <- list(aug_stand_D[[3]], aug_strict_D[[3]])
 
 ################################################## g-function
@@ -131,33 +136,12 @@ aug_dette_ofat_gauss_0 <- lapply(1:length(ofat_D), function(i) {
 save(aug_dette_ofat_gauss_0, file = "aug_dette_ofat_gauss_0.RData")
 
 
-############################################################ p = 10
-set.seed(0)
-test_X <- MOFAT::qmc_generate(10000,10)
-# ofat_D <- list(aug_mofat_D[[4]], aug_stand_D[[4]], aug_strict_D[[4]])
-ofat_D <- list(aug_stand_D[[4]], aug_strict_D[[4]])
-
-################################################## wing
-wing_e <- function(X) {
-  val = wingweight(X)
-  return(val)
-}
-aug_wing_ofat_gauss_0 <- lapply(1:length(ofat_D), function(i) {
-  surrogate_parallel(X_ls = ofat_D[[i]], 
-  X_type = "OFAT", l = 4,fun = wing_e, kernel = "Gaussian", 
-  test_X = test_X)
-})
-save(aug_wing_ofat_gauss_0, file = "aug_wing_ofat_gauss_0.RData")
-
-
-
 ############################################################
 ############################################################
 ############################################################ p = 20
 set.seed(0)
 test_X <- MOFAT::qmc_generate(10000,20)
-# ofat_D <- list(aug_mofat_D[[5]], aug_stand_D[[5]], aug_strict_D[[5]])
-ofat_D <- list(aug_stand_D[[5]], aug_strict_D[[5]])
+ofat_D <- list(aug_stand_D[[length(aug_stand_D)]], aug_strict_D[[length(aug_strict_D)]])
 
 ################################################## OTL-Circuit
 X = spacefillr::generate_sobol_set(10000,6)
@@ -293,20 +277,3 @@ aug_dette_ofat_gauss_1 <- lapply(1:length(ofat_D), function(i) {
   test_X = test_X)
 })
 save(aug_dette_ofat_gauss_1, file = "aug_dette_ofat_gauss_1.RData")
-
-
-################################################## wing
-X = spacefillr::generate_sobol_set(10000,10)
-y = wingweight(X)
-sd = sqrt(var(y) / 100)
-wing_e <- function(X) {
-  val = wingweight(X)
-  e = apply(X, 1, inert, p = 10, k = 10, seed = 0, sd = sd)
-  return(val + e)
-}
-aug_wing_ofat_gauss_1 <- lapply(1:length(ofat_D), function(i) {
-  surrogate_parallel(X_ls = ofat_D[[i]], 
-  X_type = "OFAT", l = 4,fun = wing_e, kernel = "Gaussian", 
-  test_X = test_X)
-})
-save(aug_wing_ofat_gauss_1, file = "aug_wing_ofat_gauss_1.RData")

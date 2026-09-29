@@ -1,5 +1,14 @@
 rm(list = ls())
-setwd("/Users/weiyang/Library/CloudStorage/OneDrive-GeorgiaInstituteofTechnology/OFAT Design/code/modeling/mim")
+# Resolve paths from the SOFT repository root or any subdirectory.
+soft_root <- normalizePath(".")
+while (!file.exists(file.path(soft_root, "functions.R"))) {
+  if (identical(soft_root, dirname(soft_root))) {
+    stop("Run this script from the SOFT repository or one of its subdirectories.")
+  }
+  soft_root <- dirname(soft_root)
+}
+
+setwd(file.path(soft_root, "modeling", "mim"))
 
 ######################### load mse with the original dimension
 load("ackley_sfd_mim_0.RData")
@@ -18,8 +27,6 @@ load("piston_sfd_mim_0.RData")
 load("piston_ofat_mim_0.RData")
 load("robot_sfd_mim_0.RData")
 load("robot_ofat_mim_0.RData")
-load("wing_sfd_mim_0.RData")
-load("wing_ofat_mim_0.RData")
 
 
 ######################### load mse with the augmented dimension
@@ -39,8 +46,6 @@ load("piston_sfd_mim_1.RData")
 load("piston_ofat_mim_1.RData")
 load("robot_sfd_mim_1.RData")
 load("robot_ofat_mim_1.RData")
-load("wing_sfd_mim_1.RData")
-load("wing_ofat_mim_1.RData")
 
 
 ###########################################################################
@@ -203,7 +208,7 @@ plot_mse_row <- function(
   ))
 }
 
-setwd("/Users/weiyang/Library/CloudStorage/OneDrive-GeorgiaInstituteofTechnology/OFAT Design/code/modeling/visual_mim")
+setwd(file.path(soft_root, "modeling", "visual_mim"))
 png("ackley_mse.png", width = 6000, height = 2700, res = 600)
 plot_mse_row(
   ackley_sfd_mim_0,
@@ -285,18 +290,6 @@ plot_mse_row(
   row_title = "Robot"
 )
 dev.off()
-
-png("wing_mse.png", width = 6000, height = 2700, res = 600)
-plot_mse_row(
-  wing_sfd_mim_0,
-  wing_ofat_mim_0,
-  wing_sfd_mim_1,
-  wing_ofat_mim_1,
-  row_title = "Wingweight",
-  panel_titles = c("p = 10", "p = 10 + 10")
-)
-dev.off()
-
 
 library(dplyr)
 library(tidyr)

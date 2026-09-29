@@ -1,12 +1,21 @@
 rm(list = ls())
-source("/Users/weiyang/Library/CloudStorage/OneDrive-GeorgiaInstituteofTechnology/OFAT Design/code/modeling/lib.R")
-source("/Users/weiyang/Library/CloudStorage/OneDrive-GeorgiaInstituteofTechnology/OFAT Design/code/functions.R")
+# Resolve paths from the SOFT repository root or any subdirectory.
+soft_root <- normalizePath(".")
+while (!file.exists(file.path(soft_root, "functions.R"))) {
+  if (identical(soft_root, dirname(soft_root))) {
+    stop("Run this script from the SOFT repository or one of its subdirectories.")
+  }
+  soft_root <- dirname(soft_root)
+}
+
+source(file.path(soft_root, "modeling", "lib.R"))
+source(file.path(soft_root, "functions.R"))
 
 ####### load prerun design
-setwd("/Users/weiyang/Library/CloudStorage/OneDrive-GeorgiaInstituteofTechnology/OFAT Design/code/modeling/designs")
+setwd(file.path(soft_root, "modeling", "designs"))
 load("prerun MmLHD.RData")
 load("prerun maxpro.RData")
-setwd("/Users/weiyang/Library/CloudStorage/OneDrive-GeorgiaInstituteofTechnology/OFAT Design/code/modeling/mim")
+setwd(file.path(soft_root, "modeling", "mim"))
 
 ############################################################ p = 6
 set.seed(0)
@@ -127,31 +136,12 @@ dette_sfd_mim_0 <- lapply(1:2, function(i) {
 save(dette_sfd_mim_0, file = "dette_sfd_mim_0.RData")
 
 
-############################################################ p = 10
-set.seed(0)
-test_X <- MOFAT::qmc_generate(10000,10)
-sf_D <- list(MmLHD_D[[4]], maxpro_D[[4]])
-
-################################################## wing
-wing_e <- function(X) {
-  val = wingweight(X)
-  return(val)
-}
-wing_sfd_mim_0 <- lapply(1:2, function(i) {
-  surrogate_parallel(X_ls = sf_D[[i]], 
-  X_type = "space-filling", l = 0,fun = wing_e, kernel = "MIM", 
-  test_X = test_X)
-})
-save(wing_sfd_mim_0, file = "wing_sfd_mim_0.RData")
-
-
-
 ############################################################
 ############################################################
 ############################################################ p = 20
 set.seed(0)
 test_X <- MOFAT::qmc_generate(10000,20)
-sf_D <- list(MmLHD_D[[5]], maxpro_D[[5]])
+sf_D <- list(MmLHD_D[[length(MmLHD_D)]], maxpro_D[[length(maxpro_D)]])
 
 ################################################## OTL-Circuit
 X = spacefillr::generate_sobol_set(10000,6)
@@ -287,20 +277,3 @@ dette_sfd_mim_1 <- lapply(1:2, function(i) {
   test_X = test_X)
 })
 save(dette_sfd_mim_1, file = "dette_sfd_mim_1.RData")
-
-
-################################################## wing
-X = spacefillr::generate_sobol_set(10000,10)
-y = wingweight(X)
-sd = sqrt(var(y) / 100)
-wing_e <- function(X) {
-  val = wingweight(X)
-  e = apply(X, 1, inert, p = 10, k = 10, seed = 0, sd = sd)
-  return(val + e)
-}
-wing_sfd_mim_1 <- lapply(1:2, function(i) {
-  surrogate_parallel(X_ls = sf_D[[i]], 
-  X_type = "space-filling", l = 0,fun = wing_e, kernel = "MIM", 
-  test_X = test_X)
-})
-save(wing_sfd_mim_1, file = "wing_sfd_mim_1.RData")
